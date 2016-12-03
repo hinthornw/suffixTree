@@ -9,14 +9,10 @@ Uses g++ to build.
 
 Commands:
 
-<code>
-$>make ph
 
-$>./ph
-
-Parsing lambda_scramble.fa
-
-...
-</code>
+    $>make ph
+    $>./ph
+    Parsing lambda_scramble.fa 
+    ...
 
 Prints out the test script, timing, etc. Takes about 5 minutes on my machine in its current form to complete.
