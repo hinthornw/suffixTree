@@ -5,7 +5,16 @@
 #include <vector>
 #include "suffix_tree.h"
 #define ALPH_SIZE 4 //size of alphabet being used
+/*
+Author: WIlliam Hinthorn
+File: suffix_tree.cpp
 
+
+References: Algorithm developed by Ukkonen. This code developed while referencing
+http://www.geeksforgeeks.org/generalized-suffix-tree-1/
+Though those algs were incomplete, filled with memory leaks, and had  a number of other problems.
+
+*/
 typedef struct SuffixNode {
 	struct SuffixNode ** children;
 	struct SuffixNode * link;
@@ -134,6 +143,9 @@ int bioTable(char c){
 			return 4;
 		case '$':
 			return 5;
+		default:
+			std::cout << "Input (" << c <<") is not in alphabet.\n";
+			return -1; // will hopefully give a segfault
 	}
 }
 char bioTable(int i){
@@ -150,11 +162,14 @@ char bioTable(int i){
 			return '#';
 		case 5:
 			return '$';
+		default:
+			std::cout << "Input (" << i <<") is not in alphabet.\n";
+			return '\0'; // lol
 	}
 }
 
 //Actual Stuff ***************
-
+//WHAT I DID: Find all "tree->text[" replace with bioTree(tree->text[]
 void extendTree(int pos, sTree * tree){
 	tree->lEnd = pos;
 	tree->lastCreated = NULL; // No newly created node for new phase
@@ -168,8 +183,8 @@ void extendTree(int pos, sTree * tree){
 		}
 		
 		// If edge not created
-		if (tree->aN->children[tree->text[tree->aE]] == NULL){
-			tree->aN->children[tree->text[tree->aE]] = newNode(pos, &(tree->lEnd), tree);
+		if (tree->aN->children[bioTable(tree->text[tree->aE])] == NULL){
+			tree->aN->children[bioTable(tree->text[tree->aE])] = newNode(pos, &(tree->lEnd), tree);
 
 			//update suffix link
 			if (tree->lastCreated != NULL){
@@ -179,7 +194,7 @@ void extendTree(int pos, sTree * tree){
 
 		}
 		else{
-			sNode * next = tree->aN->children[tree->text[tree->aE]]; // next node is the one pointed to by active edge
+			sNode * next = tree->aN->children[bioTable(tree->text[tree->aE])]; // next node is the one pointed to by active edge
 			if(walkDown(next, tree)){
 				continue;				//WILL: WHY?
 			}
@@ -200,12 +215,12 @@ void extendTree(int pos, sTree * tree){
 			*(tree->splitEnd) = next->start + tree->aL - 1; // End of new split
 
 			sNode * split = newNode(next->start, tree->splitEnd, tree);
-			tree->aN->children[tree->text[tree->aE]] = split;
+			tree->aN->children[bioTable(tree->text[tree->aE])] = split;
 
 			//add new leaf node from split
-			split->children[tree->text[pos]] = newNode(pos, &(tree->lEnd), tree);
+			split->children[bioTable(tree->text[pos])] = newNode(pos, &(tree->lEnd), tree);
 			next->start += tree->aL;
-			split->children[tree->text[next->start]] = next;
+			split->children[bioTable(tree->text[next->start])] = next;
 
 			//if needed, update suffx link before continuing
 			if(tree->lastCreated != NULL){
@@ -410,38 +425,38 @@ int longestCommonSubstring(sTree * tree){
 	//std::cout << "SIze = " << size1 << std::endl;
 	traverse(tree->root, 0, &maxHeight, &startIndex, tree, size1);
 	int k;
-	for(k = 0; k < maxHeight; k++)
-		std::cout << tree->text[k + startIndex];
-	std::cout << std:: endl;
+	// for(k = 0; k < maxHeight; k++)
+	// 	std::cout << tree->text[k + startIndex];
+	// std::cout << std:: endl;
 	return maxHeight;
 }
 
-int main(int argc, char * argv[]){
-	/*char t = 'A';
-	int ** num = new int *[256];
-	for(int i = 0; i < 256; i++){
-		num[i] = new int();
-		*(num[i]) = i;
-	}
-	std::cout << "Testing" << std::endl;
-	std::cout << "Val of 'A' = " << num[t] << " = " << *num[t] << std::endl;
-	delete *num;*/
-	std::string input = "BAAAAAAAAAAAAAAiam";
-	std::string input2 = "iamAAAAAAAAAAAAAAAAAB";
-	int length;
-	sTree * tree;
-	int DEFAULTALPHA = 256;
-	// std::cout << "Input a string to build a suffix tree." << std::endl;	
-	// std::cin >> input;
-	// std::cin >> input2;
-	//length = input.length();
-	//tree = buildTree(input, length, DEFAULTALPHA);
-	tree = buildMultiTree(input, input2, DEFAULTALPHA);
-	std::cout << "Finding Longest Common Substring" << std::endl;
-	std::cout << longestCommonSubstring(tree) << std::endl;
-	//printTree(tree);
-	freeTree(tree);
-	return 0;
+// int main(int argc, char * argv[]){
+// 	/*char t = 'A';
+// 	int ** num = new int *[256];
+// 	for(int i = 0; i < 256; i++){
+// 		num[i] = new int();
+// 		*(num[i]) = i;
+// 	}
+// 	std::cout << "Testing" << std::endl;
+// 	std::cout << "Val of 'A' = " << num[t] << " = " << *num[t] << std::endl;
+// 	delete *num;*/
+// 	std::string input = "CAAAAAAAAAAAAAACGTGT";
+// 	std::string input2 = "AGTGTAAAAAAAAAAAAAAAAAA";
+// 	int length;
+// 	sTree * tree;
+// 	int DEFAULTALPHA = 6;
+// 	// std::cout << "Input a string to build a suffix tree." << std::endl;	
+// 	// std::cin >> input;
+// 	// std::cin >> input2;
+// 	//length = input.length();
+// 	//tree = buildTree(input, length, DEFAULTALPHA);
+// 	tree = buildMultiTree(input, input2, DEFAULTALPHA);
+// 	std::cout << "Finding Longest Common Substring" << std::endl;
+// 	std::cout << longestCommonSubstring(tree) << std::endl;
+// 	//printTree(tree);
+// 	freeTree(tree);
+// 	return 0;
 
 
-}
+// }

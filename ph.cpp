@@ -276,7 +276,7 @@ void fastaParser(std::string filename, sSequencer * seq){
 }
 
 main(int argc, char * argv[]){
-	if(argc !=2) {fprintf(stderr, "Function Call Error.\n");}
+	//if(argc !=2) {fprintf(stderr, "Function Call Error.\n");}
 	int N; // number of sequences extracted
 	int i; //iterator
 	clock_t t;
@@ -285,6 +285,7 @@ main(int argc, char * argv[]){
 	stringVec errors;
 	std::string filename = "lambda_scramble.fa";
 	std::cout << "Parsing " << filename << ".\n";
+	
 	sSequencer * seq = new sSequencer();
 
 	t = clock();

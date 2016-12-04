@@ -4,10 +4,10 @@ onCheck: testMem2
 	valgrind --tool=memcheck --leak-check=yes ./a.out
 
 ph: ph.o suffix_tree.o 
-	g++ -o ph ph.o suffix_tree.o
+	g++ -o  ph ph.o suffix_tree.o
 
 ph.o: ph.cpp suffix_tree.h
-	g++ -c ph.cpp
+	g++ -c  -std=gnu++11 ph.cpp
 
 suffix_tree.o: suffix_tree.cpp suffix_tree.h
 	g++ -c suffix_tree.cpp
