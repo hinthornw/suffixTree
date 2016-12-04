@@ -34,6 +34,10 @@ Note #3: Yes I could have written all of this in python in a fraction of the spa
 effort, but while I am in school, I want to stay close to the hardware. I wouldn't do this
 for prototyping or production code since it is not flexible, is time-consuming, and it is 
 generally awful style.
+Improvements to be made:
+*add heaps for each node
+*avoid cycling through so many times
+*Make more robust/ scalable
 
 */
 
@@ -285,7 +289,7 @@ main(int argc, char * argv[]){
 	stringVec errors;
 	std::string filename = "lambda_scramble.fa";
 	std::cout << "Parsing " << filename << ".\n";
-	
+
 	sSequencer * seq = new sSequencer();
 
 	t = clock();
@@ -317,6 +321,7 @@ main(int argc, char * argv[]){
 	return 0;
 
 }
+
 
 /*stringmap  map = processed->onto;
 	std::string squish; //will be the returned item
